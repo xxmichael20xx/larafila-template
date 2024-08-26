@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\CentralRoleAuth;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -32,6 +33,7 @@ class CentralPanelProvider extends PanelProvider
             ->path('central')
             ->login()
             ->spa()
+            ->unsavedChangesAlerts()
             ->colors([
                 'primary' => Color::Emerald,
             ])
@@ -58,6 +60,9 @@ class CentralPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->authMiddleware([
+                CentralRoleAuth::class
+            ], true);
     }
 }

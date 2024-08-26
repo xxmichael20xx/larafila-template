@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasName;
 use Filament\Panel;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,11 +14,14 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * User
  *
+ * @property integer $id
  * @property string $first_name
  * @property string $last_name
+ * @property string $name
  * @property string $email
+ * @method static Builder|User role(string $roleName)
  */
-class User extends Authenticatable implements FilamentUser, HasName
+class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     use HasFactory, Notifiable, HasRoles;
 
@@ -58,18 +61,6 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * Get the full name.
-     *
-     * @return Attribute
-     */
-    protected function fullName(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value->first_name . ' ' . $value->last_name,
-        );
-    }
-
-    /**
      * Check if the user has a super admin role.
      *
      * @return bool
@@ -80,16 +71,6 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     /**
-     * Get the custom name for filament user attribute.
-     *
-     * @return string
-     */
-    public function getFilamentName(): string
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
-
-    /**
      * @param Panel $panel
      *
      * @return bool
@@ -97,5 +78,18 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (self $user) {
+            $user->name = $user->first_name . ' ' . $user->last_name;
+        });
+
+        static::updating(function (self $user) {
+            $user->name = $user->first_name . ' ' . $user->last_name;
+        });
     }
 }

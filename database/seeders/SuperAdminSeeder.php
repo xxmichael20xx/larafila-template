@@ -20,6 +20,7 @@ class SuperAdminSeeder extends Seeder
             'last_name' => 'Admin',
             'email' => 'superadmin@domain.com',
             'password' => Hash::make('admin123'),
+            'email_verified_at' => now()
         ]);
 
         // Assign super admin role

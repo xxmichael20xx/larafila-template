@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Role;
 use App\Models\User;
+use Database\Data\AdminPermissionsData;
 
 class UserPolicy
 {
@@ -25,7 +27,7 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->hasRole(Role::ADMIN) || $user->hasPermissionTo(AdminPermissionsData::CAN_VIEW_USER);
     }
 
     /**
@@ -33,7 +35,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return true;
+        return $user->hasRole(Role::ADMIN) || $user->hasPermissionTo(AdminPermissionsData::CAN_VIEW_USER);
     }
 
     /**
@@ -41,7 +43,7 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->hasRole(Role::ADMIN) || $user->hasPermissionTo(AdminPermissionsData::CAN_CREATE_USER);
     }
 
     /**
@@ -49,7 +51,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return true;
+        return $user->hasRole(Role::ADMIN) || $user->hasPermissionTo(AdminPermissionsData::CAN_UPDATE_USER);
     }
 
     /**
@@ -57,7 +59,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return true;
+        return $user->hasRole(Role::ADMIN) || $user->hasPermissionTo(AdminPermissionsData::CAN_DELETE_USER);
     }
 
     /**
@@ -65,6 +67,6 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return true;
+        return $user->hasRole(Role::ADMIN) || $user->hasPermissionTo(AdminPermissionsData::CAN_RESTORE_USER);
     }
 }
