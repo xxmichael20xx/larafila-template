@@ -9,6 +9,7 @@
         "filament/filament": "^3.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "rawilk/filament-password-input": "^2.0",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {
@@ -25,8 +26,12 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
-        }
+            "Database\\Seeders\\": "database/seeders/",
+            "Database\\Data\\": "database/data"
+        },
+        "files": [
+            "./app/Utils/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
